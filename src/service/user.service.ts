@@ -1,5 +1,7 @@
 import UserModel, { UserInput } from "../model/user.model";
 import { omit } from "lodash";
+import {UserDocument} from '../model/user.model'
+import {DocumentDefinition, FilterQuery} from "mongoose";
 
 export async function createUser(input: UserInput) {
   try {
@@ -17,4 +19,8 @@ export async function validatePassword({email , password}:{email: string, passwo
     const isValid = await user.comparePassword(password)
     if(!isValid) return false;
     return omit(user.toJSON(), 'password');
+}
+
+export async function findUser(query: FilterQuery<UserDocument>){
+    return UserModel.findOne(query).lean();
 }
